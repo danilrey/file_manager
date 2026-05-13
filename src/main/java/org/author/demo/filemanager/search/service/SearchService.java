@@ -4,7 +4,7 @@ import org.author.demo.filemanager.file.model.FileEntity;
 import org.author.demo.filemanager.file.repository.FileRepository;
 import org.author.demo.filemanager.generation.model.GeneratedDocEntity;
 import org.author.demo.filemanager.generation.repository.GeneratedDocRepository;
-import org.author.demo.filemanager.search.dto.SearchResultDto;
+import org.author.demo.filemanager.search.dto.SearchResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -25,7 +25,7 @@ public class SearchService {
         this.generatedDocRepository = generatedDocRepository;
     }
 
-    public List<SearchResultDto> search(String query, int limit) {
+    public List<SearchResponseDto> search(String query, int limit) {
         if (isValidQuery(query)) {
             String normalizedQuery = query.trim();
 
@@ -42,13 +42,13 @@ public class SearchService {
         }
     }
 
-    private List<SearchResultDto> buildSearchResults(int limit, List<FileEntity> fileEntities, List<GeneratedDocEntity> generatedDocEntities) {
+    private List<SearchResponseDto> buildSearchResults(int limit, List<FileEntity> fileEntities, List<GeneratedDocEntity> generatedDocEntities) {
         return Stream.concat(
                         fileEntities.stream().map(this::fileEntityToDto),
                         generatedDocEntities.stream().map(this::generatedEntityToDto)
                 )
                 .sorted(Comparator
-                        .comparing(SearchResultDto::getCreatedAt,
+                        .comparing(SearchResponseDto::getCreatedAt,
                                 Comparator.reverseOrder()))
                 .limit(limit)
                 .toList();
@@ -58,23 +58,23 @@ public class SearchService {
         return query != null && !query.trim().isEmpty();
     }
 
-    private SearchResultDto fileEntityToDto(FileEntity fileEntity) {
-        SearchResultDto searchResultDto = new SearchResultDto();
-        searchResultDto.setType(FILE);
-        searchResultDto.setId(fileEntity.getId());
-        searchResultDto.setTitle(fileEntity.getOriginalName());
-        searchResultDto.setCreatedAt(fileEntity.getCreatedAt());
+    private SearchResponseDto fileEntityToDto(FileEntity fileEntity) {
+        SearchResponseDto searchResponseDto = new SearchResponseDto();
+        searchResponseDto.setType(FILE);
+        searchResponseDto.setId(fileEntity.getId());
+        searchResponseDto.setTitle(fileEntity.getOriginalName());
+        searchResponseDto.setCreatedAt(fileEntity.getCreatedAt());
 
-        return searchResultDto;
+        return searchResponseDto;
     }
 
-    private SearchResultDto generatedEntityToDto(GeneratedDocEntity generatedDocEntity) {
-        SearchResultDto searchResultDto = new SearchResultDto();
-        searchResultDto.setType(GENERATED_DOC);
-        searchResultDto.setId(generatedDocEntity.getId());
-        searchResultDto.setTitle(generatedDocEntity.getTitle());
-        searchResultDto.setCreatedAt(generatedDocEntity.getCreatedAt());
+    private SearchResponseDto generatedEntityToDto(GeneratedDocEntity generatedDocEntity) {
+        SearchResponseDto searchResponseDto = new SearchResponseDto();
+        searchResponseDto.setType(GENERATED_DOC);
+        searchResponseDto.setId(generatedDocEntity.getId());
+        searchResponseDto.setTitle(generatedDocEntity.getTitle());
+        searchResponseDto.setCreatedAt(generatedDocEntity.getCreatedAt());
 
-        return searchResultDto;
+        return searchResponseDto;
     }
 }

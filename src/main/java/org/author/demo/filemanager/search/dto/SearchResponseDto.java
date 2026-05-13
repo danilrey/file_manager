@@ -3,13 +3,13 @@ package org.author.demo.filemanager.search.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class SearchResultDto {
+public class SearchResponseDto {
     private String type;
     private UUID id;
     private String title;
     private LocalDateTime createdAt;
 
-    public SearchResultDto() {
+    public SearchResponseDto() {
     }
 
     public String getType() {

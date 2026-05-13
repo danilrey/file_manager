@@ -3,6 +3,7 @@ package org.author.demo.filemanager.config;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -33,6 +34,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> internalServerErrorHandler(Exception exception) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ProblemDetail problemDetail = ProblemDetail
+                .forStatusAndDetail(status, exception.getMessage());
+
+        return ResponseEntity.status(status).body(problemDetail);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ProblemDetail> handleValidation(MethodArgumentNotValidException exception) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         ProblemDetail problemDetail = ProblemDetail
                 .forStatusAndDetail(status, exception.getMessage());
 

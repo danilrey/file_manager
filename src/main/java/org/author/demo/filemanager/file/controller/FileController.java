@@ -1,7 +1,9 @@
 package org.author.demo.filemanager.file.controller;
 
+import jakarta.validation.Valid;
 import org.author.demo.filemanager.file.dto.FileDownloadDto;
 import org.author.demo.filemanager.file.dto.FileResponseDto;
+import org.author.demo.filemanager.file.dto.FileUploadRequest;
 import org.author.demo.filemanager.file.service.FileService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -29,10 +31,8 @@ public class FileController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<FileResponseDto> uploadFile(
-            @RequestPart("file") MultipartFile file,
-            @RequestParam(value = "tags", required = false) List<String> tags) {
-        FileResponseDto created = fileService.upload(file, tags);
+    public ResponseEntity<FileResponseDto> uploadFile(@Valid @ModelAttribute FileUploadRequest request) {
+        FileResponseDto created = fileService.upload(request.getFile(), request.getTags());
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

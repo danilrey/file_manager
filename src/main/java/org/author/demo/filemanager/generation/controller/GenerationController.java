@@ -1,12 +1,12 @@
 package org.author.demo.filemanager.generation.controller;
 
+import jakarta.validation.Valid;
 import org.author.demo.filemanager.generation.dto.GeneratedRequestDto;
 import org.author.demo.filemanager.generation.dto.GeneratedResponseDto;
 import org.author.demo.filemanager.generation.service.GenerateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -20,7 +20,7 @@ public class GenerationController {
     }
 
     @PostMapping
-    public ResponseEntity<GeneratedResponseDto> generate(@RequestBody GeneratedRequestDto requestDto) throws IOException {
+    public ResponseEntity<GeneratedResponseDto> generate(@Valid @RequestBody GeneratedRequestDto requestDto) {
         GeneratedResponseDto responseDto = generateService.create(requestDto);
 
         return ResponseEntity.accepted().body(responseDto);
