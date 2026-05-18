@@ -1,4 +1,4 @@
-package org.author.demo.filemanager.generation.dto;
+package org.author.demo.filemanager.ai.dto;
 
 public record AiGeneratedResponse(String title, String response) {
 }

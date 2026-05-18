@@ -3,6 +3,8 @@ package org.author.demo.filemanager.generation.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.author.demo.filemanager.generation.dto.AiGeneratedResponse;
+import org.author.demo.filemanager.ai.dto.AiGeneratedResponse;
+import org.author.demo.filemanager.ai.service.AiService;
 import org.author.demo.filemanager.generation.dto.GeneratedRequestDto;
 import org.author.demo.filemanager.generation.provider.AiProvider;
 import org.springframework.scheduling.annotation.Async;
@@ -14,12 +16,13 @@ import java.util.UUID;
 public class GenerateWorker {
 
     private static final Logger log = LogManager.getLogger(GenerateWorker.class);
-    private final AiProvider aiProvider;
-    private final GeneratePersistenceService generatePersistenceService;
 
-    public GenerateWorker(AiProvider aiProvider, GeneratePersistenceService generatePersistenceService) {
-        this.aiProvider = aiProvider;
+    private final GeneratePersistenceService generatePersistenceService;
+    private final AiService aiService;
+
+    public GenerateWorker(GeneratePersistenceService generatePersistenceService, GeneratedDocumentRenderer generatedDocumentRenderer, FileService fileService, AiService aiService) {
         this.generatePersistenceService = generatePersistenceService;
+        this.aiService = aiService;
     }
 
     @Async("generationExecutor")
@@ -29,7 +32,7 @@ public class GenerateWorker {
             generatePersistenceService.markInProgress(id);
 
             GeneratedRequestDto requestDto = generatePersistenceService.loadRequest(id);
-            AiGeneratedResponse response = aiProvider.generate(requestDto.prompt(), requestDto.sourceFileIds());
+            AiGeneratedResponse response = aiService.generate(requestDto.prompt(), requestDto.sourceFileIds());
 
             generatePersistenceService.saveSuccess(id, response);
         } catch (Exception exception) {

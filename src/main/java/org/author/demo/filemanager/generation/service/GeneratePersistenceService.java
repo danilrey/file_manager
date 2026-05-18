@@ -1,6 +1,6 @@
 package org.author.demo.filemanager.generation.service;
 
-import org.author.demo.filemanager.generation.dto.AiGeneratedResponse;
+import org.author.demo.filemanager.ai.dto.AiGeneratedResponse;
 import org.author.demo.filemanager.generation.dto.GeneratedRequestDto;
 import org.author.demo.filemanager.generation.model.DocStatus;
 import org.author.demo.filemanager.generation.model.GeneratedDocEntity;
