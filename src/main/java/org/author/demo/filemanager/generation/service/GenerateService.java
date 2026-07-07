@@ -36,6 +36,7 @@ public class GenerateService {
         entity.setStatus(DocStatus.PENDING);
         entity.setPrompt(requestDto.prompt());
         entity.setSourceFileIds(requestDto.sourceFileIds());
+        entity.setResponseFormat(requestDto.format());
 
         GeneratedDocEntity saved = docRepository.save(entity);
         generateWorker.generateAsync(saved.getId());
@@ -58,7 +59,7 @@ public class GenerateService {
         responseDto.setTitle(saved.getTitle());
         responseDto.setContent(saved.getContent());
         responseDto.setStatus(saved.getStatus());
-
+        //todo: reset here content for files
         return responseDto;
     }
 

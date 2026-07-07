@@ -1,6 +1,7 @@
 package org.author.demo.filemanager.generation.dto;
 
 import org.author.demo.filemanager.generation.model.DocStatus;
+import org.author.demo.filemanager.generation.model.ResponseFormat;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -10,6 +11,8 @@ public class GeneratedResponseDto {
     private String title;
     private String content;
     private DocStatus status;
+    private ResponseFormat format;
+    private String downloadUrl;
     private LocalDateTime createdAt;
 
     public GeneratedResponseDto() {
@@ -17,6 +20,22 @@ public class GeneratedResponseDto {
 
     public UUID getId() {
         return id;
+    }
+
+    public ResponseFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(ResponseFormat format) {
+        this.format = format;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
     }
 
     public void setId(UUID id) {

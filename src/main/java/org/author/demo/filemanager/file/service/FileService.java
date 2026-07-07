@@ -79,6 +79,29 @@ public class FileService {
         return fileDownloadDto;
     }
 
+    public UUID saveGeneratedFile(byte[] data, String originalName, String mimeType) {
+        if (isValidData(data)) {
+            String storedPath = storageService.saveBytes(data, originalName);
+
+            FileEntity entity = new FileEntity();
+            entity.setOriginalName(originalName);
+            entity.setMimeType(mimeType);
+            entity.setSizeBytes(data.length);
+            entity.setStoragePath(storedPath);
+            entity.setTags(List.of());
+
+            FileEntity saved = fileRepository.save(entity);
+
+            return saved.getId();
+        } else {
+            throw new IllegalArgumentException(FILE_IS_EMPTY_MESSAGE);
+        }
+    }
+
+    private boolean isValidData(byte[] data) {
+        return data != null && data.length != 0;
+    }
+
     private boolean isValidFile(MultipartFile file) {
         return file != null && !file.isEmpty();
     }

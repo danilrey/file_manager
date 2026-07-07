@@ -4,6 +4,7 @@ import org.author.demo.filemanager.ai.dto.AiGeneratedResponse;
 import org.author.demo.filemanager.generation.dto.GeneratedRequestDto;
 import org.author.demo.filemanager.generation.model.DocStatus;
 import org.author.demo.filemanager.generation.model.GeneratedDocEntity;
+import org.author.demo.filemanager.generation.model.ResponseFormat;
 import org.author.demo.filemanager.generation.repository.GeneratedDocRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,7 @@ public class GeneratePersistenceService {
     }
 
     @Transactional
-    public void saveSuccess(UUID id, AiGeneratedResponse response) {
+    public void saveSuccess(UUID id, AiGeneratedResponse response, ResponseFormat format) {
         GeneratedDocEntity entity = generatedDocRepository
                 .findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(GENERATED_DOC_NOT_FOUND_MESSAGE));
@@ -38,6 +39,7 @@ public class GeneratePersistenceService {
         entity.setTitle(response.title());
         entity.setContent(response.response());
         entity.setStatus(DocStatus.DONE);
+        entity.setResponseFormat(format);
     }
 
     @Transactional
@@ -57,7 +59,8 @@ public class GeneratePersistenceService {
 
         return new GeneratedRequestDto(
                 entity.getPrompt(),
-                List.copyOf(entity.getSourceFileIds())
+                List.copyOf(entity.getSourceFileIds()),
+                entity.getResponseFormat()
         );
     }
 }

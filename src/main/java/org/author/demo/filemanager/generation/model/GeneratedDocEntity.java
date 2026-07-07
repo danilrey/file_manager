@@ -35,6 +35,12 @@ public class GeneratedDocEntity {
     @Column(nullable = false)
     private DocStatus status = DocStatus.PENDING;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ResponseFormat responseFormat = ResponseFormat.TEXT;
+
+    private UUID resultFileId;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -94,5 +100,21 @@ public class GeneratedDocEntity {
 
     public void setStatus(DocStatus status) {
         this.status = status;
+    }
+
+    public UUID getResultFileId() {
+        return resultFileId;
+    }
+
+    public void setResultFileId(UUID resultFileId) {
+        this.resultFileId = resultFileId;
+    }
+
+    public ResponseFormat getResponseFormat() {
+        return responseFormat;
+    }
+
+    public void setResponseFormat(ResponseFormat responseFormat) {
+        this.responseFormat = responseFormat;
     }
 }
